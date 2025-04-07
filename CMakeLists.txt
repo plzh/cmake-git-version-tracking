@@ -4,8 +4,8 @@ project(cmake_git_version_tracking
 
 # Define the two required variables before including
 # the source code for watching a git repository.
-set(PRE_CONFIGURE_FILE "git.c.in")
-set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/git.c")
+set(PRE_CONFIGURE_FILE "git.h.in")
+set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/git.h")
 include(git_watcher.cmake)
 
 # Create a library out of the compiled post-configure file.
