@@ -41,7 +41,7 @@ cmake --build . --target demo
 
 # The configured source file should exist.
 # The git-state file should exist.
-configured_src=./_deps/cmake_git_version_tracking-build/git.h
+configured_src=./_deps/cmake_git_version_tracking-build/git.c
 git_state=./_deps/cmake_git_version_tracking-build/git-state-hash
 assert "-f $configured_src" $LINENO
 assert "-f $git_state" $LINENO

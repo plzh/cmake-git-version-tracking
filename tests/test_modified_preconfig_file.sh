@@ -27,8 +27,8 @@ cmake --build . --target demo
 
 # Record the date on the post-configure file, then
 # modify the pre-configure file.
-file_to_check=./_deps/cmake_git_version_tracking-build/git.h
-file_to_modify=./_deps/cmake_git_version_tracking-src/git.h.in
+file_to_check=./_deps/cmake_git_version_tracking-build/git.c
+file_to_modify=./_deps/cmake_git_version_tracking-src/git.c.in
 before=$(stat -c %y $file_to_check)
 echo "// this is a modification" >> "$file_to_modify"
 
