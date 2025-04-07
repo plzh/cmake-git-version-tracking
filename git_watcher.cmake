@@ -15,6 +15,12 @@
 #   POST_CONFIGURE_FILE (REQUIRED)
 #   -- The path to the configured PRE_CONFIGURE_FILE.
 #
+#   PRE_CONFIGURE_FILE2 (REQUIRED)
+#   -- The path to the second file that'll be configured.
+#
+#   POST_CONFIGURE_FILE2 (REQUIRED)
+#   -- The path to the configured PRE_CONFIGURE_FILE2.
+#
 #   GIT_STATE_FILE (OPTIONAL)
 #   -- The path to the file used to store the previous build's git state.
 #      Defaults to the current binary directory.
@@ -81,6 +87,8 @@ endmacro()
 
 CHECK_REQUIRED_VARIABLE(PRE_CONFIGURE_FILE)
 CHECK_REQUIRED_VARIABLE(POST_CONFIGURE_FILE)
+CHECK_REQUIRED_VARIABLE(PRE_CONFIGURE_FILE2)
+CHECK_REQUIRED_VARIABLE(POST_CONFIGURE_FILE2)
 CHECK_OPTIONAL_VARIABLE(GIT_STATE_FILE "${CMAKE_CURRENT_BINARY_DIR}/git-state-hash")
 CHECK_OPTIONAL_VARIABLE(GIT_WORKING_DIR "${CMAKE_SOURCE_DIR}")
 CHECK_OPTIONAL_VARIABLE_NOPATH(GIT_FAIL_IF_NONZERO_EXIT TRUE)
@@ -252,6 +260,7 @@ endfunction()
 
 
 
+
 # Function: GitStateChangedAction
 # Description: this function is executed when the state of the git
 #              repository changes (e.g. a commit is made).
@@ -260,7 +269,7 @@ function(GitStateChangedAction)
         set(${var_name} $ENV{${var_name}})
     endforeach()
     configure_file("${PRE_CONFIGURE_FILE}" "${POST_CONFIGURE_FILE}" @ONLY)
-    configure_file("git2.h.in" "git2.h" @ONLY)
+    configure_file("${PRE_CONFIGURE_FILE2}" "${POST_CONFIGURE_FILE2}" @ONLY)
 endfunction()
 
 
@@ -327,9 +336,10 @@ endfunction()
 function(SetupGitMonitoring)
     add_custom_target(check_git
         ALL
-        DEPENDS ${PRE_CONFIGURE_FILE}
+        DEPENDS ${PRE_CONFIGURE_FILE} ${PRE_CONFIGURE_FILE2}
         BYPRODUCTS
             ${POST_CONFIGURE_FILE}
+            ${POST_CONFIGURE_FILE2}
             ${GIT_STATE_FILE}
         COMMENT "Checking the git repository for changes..."
         COMMAND
@@ -340,6 +350,8 @@ function(SetupGitMonitoring)
             -DGIT_STATE_FILE=${GIT_STATE_FILE}
             -DPRE_CONFIGURE_FILE=${PRE_CONFIGURE_FILE}
             -DPOST_CONFIGURE_FILE=${POST_CONFIGURE_FILE}
+            -DPRE_CONFIGURE_FILE2=${PRE_CONFIGURE_FILE2}
+            -DPOST_CONFIGURE_FILE2=${POST_CONFIGURE_FILE2}
             -DGIT_FAIL_IF_NONZERO_EXIT=${GIT_FAIL_IF_NONZERO_EXIT}
             -DGIT_IGNORE_UNTRACKED=${GIT_IGNORE_UNTRACKED}
             -P "${CMAKE_CURRENT_LIST_FILE}")
