@@ -230,7 +230,7 @@ function(GetGitState _working_dir)
     else()
         set(ENV{GIT_DESCRIBE} "${output}")
     endif()
-    
+
     # Convert HEAD to a symbolic ref. This can fail, in which case we just
     # set that variable to HEAD.
     set(_permit_git_failure ON)
@@ -260,6 +260,7 @@ function(GitStateChangedAction)
         set(${var_name} $ENV{${var_name}})
     endforeach()
     configure_file("${PRE_CONFIGURE_FILE}" "${POST_CONFIGURE_FILE}" @ONLY)
+    configure_file("git2.h.in" "git2.h" @ONLY)
 endfunction()
 
 
